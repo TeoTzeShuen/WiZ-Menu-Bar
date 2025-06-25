@@ -14,6 +14,7 @@ class LightController {
     var ip1: String = "192.168.1.14" //ceiling
     var ip2: String = "192.168.1.10" //uplighter
     
+    
     func messageSend(ip:String, sendMessage: String){
         let message = sendMessage
         var readData:Data = message.data(using: .utf8)!
@@ -88,5 +89,31 @@ class LightController {
             print(error)
         }
     }
+    
+    func setTemp(ip: String, temp: Double = 4400) {
+            let message = """
+            {"method": "setPilot", "params": {"temp": \(temp)}}
+        """
+            do {
+                s = try Socket.create(family: .inet, type: .datagram, proto: .udp)
+                let addr = Socket.createAddress(for: ip, on: 38899)!
+                try s.write(from: message, to: addr)
+            } catch let error {
+                print(error)
+            }
+        }
+    
+    func setBrightess(ip: String, brightness: Double = 100) {
+            let message = """
+            {"method": "setPilot", "params": {"dimming": \(brightness), "state": true}}
+        """
+            do {
+                s = try Socket.create(family: .inet, type: .datagram, proto: .udp)
+                let addr = Socket.createAddress(for: ip, on: 38899)!
+                try s.write(from: message, to: addr)
+            } catch let error {
+                print(error)
+            }
+        }
 }
 
