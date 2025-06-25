@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ContentView: View {
     @State private var ceilingOn = false
     @State private var uplighterOn = false
@@ -15,22 +14,22 @@ struct ContentView: View {
     var body: some View
     {
         VStack(alignment: .trailing){
-            Toggle("Celiing", isOn: $ceilingOn)
+            Toggle("", systemImage: "lamp.ceiling",isOn: $ceilingOn)
                 .onChange(of: ceilingOn, initial: false){
                     if ceilingOn{
-                        LightController().turnOn(ip: "192.168.1.14")
+                        LightController().turnOn(ip: LightController().ip1)
                     }
                     else{
-                        LightController().turnOff(ip: "192.168.1.14")
+                        LightController().turnOff(ip: LightController().ip1)
                     }
                 }
-            Toggle("Uplighter", isOn: $uplighterOn)
+            Toggle("", systemImage: "lamp.floor" ,isOn: $uplighterOn)
                 .onChange(of: uplighterOn, initial: false){
                     if uplighterOn{
-                        LightController().turnOn(ip: "192.168.1.10")
+                        LightController().turnOn(ip: LightController().ip2)
                     }
                     else{
-                        LightController().turnOff(ip: "192.168.1.10")
+                        LightController().turnOff(ip: LightController().ip2)
                     }
                 }
             }

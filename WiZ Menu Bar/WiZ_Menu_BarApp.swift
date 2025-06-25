@@ -12,13 +12,13 @@ struct WiZ_Menu_BarApp: App {
     var body: some Scene {
         MenuBarExtra(
             "Lights",
-            systemImage: "lamp.floor.fill"
+            systemImage: "bolt.house"
         ){
             ContentView()
                 .overlay(alignment: .topTrailing) {
                     Button(
                         "Quit",
-                        systemImage: "xmark.circle.fill"
+                        systemImage: "x.circle"
                     ){
                         NSApp.terminate(nil)
                     }
