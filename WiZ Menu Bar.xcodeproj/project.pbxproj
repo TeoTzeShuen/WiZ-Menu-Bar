@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		18F69B2E2E0A9C9600545C38 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = 18F69B2D2E0A9C9600545C38 /* Socket */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		18BA5B5B2E0A7BA400CAD0B3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18F69B2E2E0A9C9600545C38 /* Socket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = "WiZ Menu Bar";
 			packageProductDependencies = (
+				18F69B2D2E0A9C9600545C38 /* Socket */,
 			);
 			productName = "WiZ Menu Bar";
 			productReference = 18BA5B4C2E0A7BA300CAD0B3 /* WiZ Menu Bar.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 18BA5B432E0A7BA300CAD0B3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				18F69B2C2E0A9C9600545C38 /* XCRemoteSwiftPackageReference "BlueSocket" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18BA5B4D2E0A7BA300CAD0B3 /* Products */;
 			projectDirPath = "";
@@ -398,6 +407,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -423,6 +433,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -541,6 +552,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		18F69B2C2E0A9C9600545C38 /* XCRemoteSwiftPackageReference "BlueSocket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Kitura/BlueSocket.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18F69B2D2E0A9C9600545C38 /* Socket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18F69B2C2E0A9C9600545C38 /* XCRemoteSwiftPackageReference "BlueSocket" */;
+			productName = Socket;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 18BA5B442E0A7BA300CAD0B3 /* Project object */;
 }

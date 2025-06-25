@@ -10,8 +10,21 @@ import SwiftUI
 @main
 struct WiZ_Menu_BarApp: App {
     var body: some Scene {
-        WindowGroup {
+        MenuBarExtra(
+            "Lights",
+            systemImage: "lamp.floor.fill"
+        ){
             ContentView()
-        }
+                .overlay(alignment: .topTrailing) {
+                    Button(
+                        "Quit",
+                        systemImage: "xmark.circle.fill"
+                    ){
+                        NSApp.terminate(nil)
+                    }
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.plain)
+                }}
+        .menuBarExtraStyle(.window)
     }
 }
