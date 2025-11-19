@@ -1,30 +1,25 @@
-//
-//  WiZ_Menu_BarApp.swift
-//  WiZ Menu Bar
-//
-//  Created by Tze Shuen Teo on 24/6/25.
-//
-
 import SwiftUI
 
 @main
-struct WiZ_Menu_BarApp: App {
+struct WiZMenuApp: App {
+    // This adaptor helps hide the app from the dock
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
-        MenuBarExtra(
-            "Lights",
-            systemImage: "bolt.house"
-        ){
+        MenuBarExtra("WiZ Control", systemImage: "lightbulb.fill") {
             ContentView()
-                .overlay(alignment: .topTrailing) {
-                    Button(
-                        "Quit",
-                        systemImage: "x.circle"
-                    ){
-                        NSApp.terminate(nil)
-                    }
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.plain)
-                }}
-        .menuBarExtraStyle(.window)
+        }
+        .menuBarExtraStyle(.window) // Allows interactive sliders
+        
+        Settings {
+            SettingsView()
+        }
+    }
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Keeps the app as a menu bar accessory (no dock icon)
+        NSApp.setActivationPolicy(.accessory)
     }
 }
