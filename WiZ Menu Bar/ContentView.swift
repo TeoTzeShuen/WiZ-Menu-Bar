@@ -116,6 +116,18 @@ struct ContentView: View {
                 }
 
                 // 3. Warmth
+                
+                let kelvinGradient = LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 1.0, green: 0.7, blue: 0.4),
+                        Color.white,
+                        Color(red: 0.8, green: 0.9, blue: 1.0)
+                    ]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                    
+                
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Image(systemName: "thermometer.sun.fill")
@@ -132,7 +144,13 @@ struct ContentView: View {
                     Slider(value: $warmth, in: 2200...6200, step: 400) {
                         EmptyView()
                     }
-                    .tint(.orange)
+                    .background(
+                        Capsule()
+                            .fill(kelvinGradient)
+                            .frame(height: 4)
+                            .padding(.horizontal, 2)
+                    )
+                    .tint(.clear)
                     .onChange(of: warmth) { newValue in
                         if !isSyncing {
                             performAction { ip in
