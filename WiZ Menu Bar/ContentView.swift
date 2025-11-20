@@ -1,37 +1,50 @@
 import SwiftUI
 
 struct ContentView: View {
+    // IPs
     @AppStorage("bulb1_ip") private var bulb1IP: String = ""
     @AppStorage("bulb2_ip") private var bulb2IP: String = ""
+    
+    // Names
+    @AppStorage("bulb1_name") private var bulb1Name: String = "Bulb 1"
+    @AppStorage("bulb2_name") private var bulb2Name: String = "Bulb 2"
 
-    // Selection State
     enum BulbSelection: String, CaseIterable {
-        case all = "All"
-        case bulb1 = "Bulb 1"
-        case bulb2 = "Bulb 2"
+        case bulb1
+        case bulb2
     }
-    @State private var selection: BulbSelection = .all
+    @State private var selection: BulbSelection = .bulb1
 
     // UI State
     @State private var isLightOn: Bool = false
     @State private var brightness: Double = 100
     @State private var warmth: Double = 4400
+    
+    // Flag to prevent feedback loops
     @State private var isSyncing: Bool = false
+    
+    var isConfigurationValid: Bool {
+        switch selection {
+        case .bulb1: return !bulb1IP.isEmpty
+        case .bulb2: return !bulb2IP.isEmpty
+        }
+    }
     
     var body: some View {
         VStack(spacing: 16) {
             
-            // Header & Settings Button
+            // Header
             HStack {
                 Text("Home Lights")
                     .font(.headline)
                 Spacer()
-                if isSyncing {
-                    ProgressView()
-                        .scaleEffect(0.5)
-                }
                 
-                // Settings Button Logic
+                // FIXED: Use opacity + fixed frame to prevent window jitter
+                ProgressView()
+                    .scaleEffect(0.5)
+                    .frame(width: 16, height: 16) // Force small size to match text height
+                    .opacity(isSyncing ? 1 : 0)   // Hide instead of remove to reserve space
+                
                 if #available(macOS 14.0, *) {
                     SettingsLink {
                         Image(systemName: "gearshape.fill")
@@ -48,86 +61,94 @@ struct ContentView: View {
                 }
             }
             
-            // Bulb Selector
+            // Picker
             Picker("", selection: $selection) {
                 ForEach(BulbSelection.allCases, id: \.self) { option in
-                    Text(option.rawValue)
+                    Text(displayName(for: option)).tag(option)
                 }
             }
             .pickerStyle(.segmented)
             .onChange(of: selection) { _ in
-                // When switching bulbs, refresh the UI with that bulb's current state
                 syncStateWithBulbs()
             }
             
-            Divider()
+            if isConfigurationValid {
+                Divider()
 
-            // 1. Master Switch
-            Toggle(isOn: $isLightOn) {
-                Text(isLightOn ? "Lights On" : "Lights Off")
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .toggleStyle(.switch)
-            .onChange(of: isLightOn) { newValue in
-                performAction { ip in
-                    if newValue { LightController.turnOn(ip: ip) }
-                    else { LightController.turnOff(ip: ip) }
+                // 1. Power Button
+                Button(action: toggleBulbLogic) {
+                    HStack {
+                        Image(systemName: "power")
+                        Text(isLightOn ? "Turn Off" : "Turn On")
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
                 }
-            }
+                .buttonStyle(.borderedProminent)
+                .tint(isLightOn ? .orange : .gray)
+                .controlSize(.large)
 
-            // 2. Brightness
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Image(systemName: "sun.max.fill")
-                        .font(.caption)
-                    Text("Brightness")
-                        .font(.caption)
-                    Spacer()
-                    Text("\(Int(brightness))%")
-                        .font(.caption)
-                        .monospacedDigit()
-                        .foregroundColor(.secondary)
-                }
-                
-                Slider(value: $brightness, in: 10...100, step: 5) {
-                    EmptyView() // Redundant label removed
-                }
-                .onChange(of: brightness) { newValue in
-                    performAction { ip in
-                        LightController.setBrightess(ip: ip, brightness: newValue)
+                // 2. Brightness
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "sun.max.fill")
+                            .font(.caption)
+                        Text("Brightness")
+                            .font(.caption)
+                        Spacer()
+                        Text("\(Int(brightness))%")
+                            .font(.caption)
+                            .monospacedDigit()
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Slider(value: $brightness, in: 10...100, step: 10) {
+                        EmptyView()
+                    }
+                    .onChange(of: brightness) { newValue in
+                        if !isSyncing {
+                            performAction { ip in
+                                LightController.setBrightess(ip: ip, brightness: newValue)
+                            }
+                        }
                     }
                 }
-            }
 
-            // 3. Warmth
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Image(systemName: "thermometer.sun.fill")
-                        .font(.caption)
-                    Text("Warmth")
-                        .font(.caption)
-                    Spacer()
-                    Text("\(Int(warmth))K")
-                        .font(.caption)
-                        .monospacedDigit()
-                        .foregroundColor(.secondary)
-                }
-                
-                // Slider from Warm (2200) to Cold (6200)
-                // Range = 4000. Step = 400 to provide exactly 10 steps.
-                Slider(value: $warmth, in: 2200...6200, step: 400) {
-                    EmptyView() // Redundant label removed
-                }
-                .tint(.orange)
-                .onChange(of: warmth) { newValue in
-                    performAction { ip in
-                        LightController.setTemp(ip: ip, temp: newValue)
+                // 3. Warmth
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "thermometer.sun.fill")
+                            .font(.caption)
+                        Text("Warmth")
+                            .font(.caption)
+                        Spacer()
+                        Text("\(Int(warmth))K")
+                            .font(.caption)
+                            .monospacedDigit()
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Slider(value: $warmth, in: 2200...6200, step: 400) {
+                        EmptyView()
+                    }
+                    .tint(.orange)
+                    .onChange(of: warmth) { newValue in
+                        if !isSyncing {
+                            performAction { ip in
+                                LightController.setTemp(ip: ip, temp: newValue)
+                            }
+                        }
                     }
                 }
+            } else {
+                Divider()
+                Text("Please configure IP Address in Settings")
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
             }
-            
-            // Quit button removed from here
         }
         .padding()
         .frame(width: 260)
@@ -138,49 +159,80 @@ struct ContentView: View {
 
     // MARK: - Logic
     
-    // Determines which IP(s) to send the command to based on selection
-    func performAction(action: @escaping (String) -> Void) {
-        var targetIPs: [String] = []
-        
+    func displayName(for selection: BulbSelection) -> String {
         switch selection {
-        case .all:
-            targetIPs = [bulb1IP, bulb2IP]
         case .bulb1:
-            targetIPs = [bulb1IP]
+            return bulb1Name.isEmpty ? "Bulb 1" : bulb1Name
         case .bulb2:
-            targetIPs = [bulb2IP]
+            return bulb2Name.isEmpty ? "Bulb 2" : bulb2Name
+        }
+    }
+    
+    // Toggle logic
+    func toggleBulbLogic() {
+        let ip: String
+        switch selection {
+        case .bulb1: ip = bulb1IP
+        case .bulb2: ip = bulb2IP
         }
         
-        // Filter out empty strings just in case settings are blank
-        let validIPs = targetIPs.filter { !$0.isEmpty }
+        guard !ip.isEmpty else { return }
         
         Task {
-            for ip in validIPs {
-                action(ip)
+            if let status = LightController.getStatus(ip: ip) {
+                let shouldTurnOn = !status.isOn
+                
+                if shouldTurnOn {
+                    LightController.turnOn(ip: ip)
+                } else {
+                    LightController.turnOff(ip: ip)
+                }
+                
+                await MainActor.run {
+                    self.isLightOn = shouldTurnOn
+                }
             }
         }
     }
     
-    // Syncs the UI sliders with the selected bulb
-    func syncStateWithBulbs() {
-        // If "All" is selected, we default to syncing with Bulb 1 for the UI display
-        let syncIP: String
+    // Slider Logic (Write-only)
+    func performAction(action: @escaping (String) -> Void) {
+        let ip: String
         switch selection {
-        case .all, .bulb1:
-            syncIP = bulb1IP
-        case .bulb2:
-            syncIP = bulb2IP
+        case .bulb1: ip = bulb1IP
+        case .bulb2: ip = bulb2IP
         }
         
-        guard !syncIP.isEmpty else { return }
+        guard !ip.isEmpty else { return }
+        
+        Task {
+            action(ip)
+        }
+    }
+    
+    // Initial Sync Logic
+    func syncStateWithBulbs() {
+        let ip: String
+        switch selection {
+        case .bulb1: ip = bulb1IP
+        case .bulb2: ip = bulb2IP
+        }
+        
+        guard !ip.isEmpty else { return }
         
         isSyncing = true
+        
         Task.detached {
-            if let status = LightController.getStatus(ip: syncIP) {
+            if let status = LightController.getStatus(ip: ip) {
                 await MainActor.run {
                     self.isLightOn = status.isOn
                     self.brightness = status.brightness
                     self.warmth = status.temp
+                }
+                
+                try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+                
+                await MainActor.run {
                     self.isSyncing = false
                 }
             } else {
