@@ -30,5 +30,8 @@ struct SettingsView: View {
         }
         .padding()
         .frame(width: 350, height: 300) // Increased height for new fields
+        .onAppear {
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 }

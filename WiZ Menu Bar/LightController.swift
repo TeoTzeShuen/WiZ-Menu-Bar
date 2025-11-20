@@ -12,6 +12,10 @@ struct WizResult: Codable {
     let state: Bool?
     let dimming: Int?
     let temp: Int?
+    // Added r,g,b parsing just in case we want to read it later
+    let r: Int?
+    let g: Int?
+    let b: Int?
 }
 
 // 2. The Controller
@@ -81,9 +85,21 @@ struct LightController {
         _ = send(ip: ip, message: message)
     }
     
+    // MARK: - NEW: Color Control
+    static func setRGB(ip: String, r: Int, g: Int, b: Int, brightness: Double = 100) {
+        // Clamp values to 0-255 to prevent errors
+        let red = max(0, min(255, r))
+        let green = max(0, min(255, g))
+        let blue = max(0, min(255, b))
+        let dimming = Int(brightness)
+        
+        let message = """
+        {"id":1,"method":"setPilot","params":{"r":\(red),"g":\(green),"b":\(blue),"dimming":\(dimming)}}
+        """
+        _ = send(ip: ip, message: message)
+    }
+    
     // MARK: - Status Check
-    // This replaces your original checkLightState.
-    // It returns a tuple of (isOn, Brightness, Temp) so the UI can update.
     static func getStatus(ip: String) -> (isOn: Bool, brightness: Double, temp: Double)? {
         let message = #"{"method":"getPilot","params":{}}"#
         
@@ -97,7 +113,6 @@ struct LightController {
         do {
             let response = try decoder.decode(WizResponse.self, from: data)
             if let res = response.result {
-                // Return the values found, or defaults if missing
                 return (
                     isOn: res.state ?? false,
                     brightness: Double(res.dimming ?? 100),
