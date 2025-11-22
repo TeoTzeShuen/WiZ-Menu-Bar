@@ -124,4 +124,62 @@ struct LightController {
         }
         return nil
     }
+    
+    // MARK: - Discovery
+    static func discoverBulbs() async -> [String] {
+        var foundIPs: Set<String> = []
+        
+        print("Starting discovery...")
+        
+        do {
+            let socket = try Socket.create(family: .inet, type: .datagram, proto: .udp)
+            try socket.udpBroadcast(enable: true) // Essential: Allows sending to 255.255.255.255
+            
+            // 2 seconds read timeout
+            try socket.setReadTimeout(value: 2000)
+            
+            let message = #"{"method":"getPilot","params":{}}"#
+            guard let data = message.data(using: .utf8) else { return [] }
+            
+            // Broadcast Address
+            // Note: On some complex networks this might need to be the specific subnet broadcast (e.g. 192.168.1.255)
+            // But 255.255.255.255 works for most simple home setups.
+            guard let broadcastAddr = Socket.createAddress(for: "255.255.255.255", on: port) else {
+                return []
+            }
+            
+            // Send the "Shout"
+            try socket.write(from: data, to: broadcastAddr)
+            
+            // Listen for replies for roughly 2 seconds
+            let startTime = Date()
+            while Date().timeIntervalSince(startTime) < 2.0 {
+                var readData = Data()
+                let (bytesRead, remoteAddr) = try socket.readDatagram(into: &readData)
+                
+                if bytesRead > 0, let addr = remoteAddr {
+                    // Extract IP
+                    if let hostname = Socket.hostnameAndPort(from: addr)?.hostname {
+                        // Filter out our own device if it somehow echoes back
+                        if !hostname.isEmpty {
+                            foundIPs.insert(hostname)
+                            print("Found bulb at: \(hostname)")
+                        }
+                    }
+                }
+            }
+            
+            socket.close()
+            
+        } catch let error {
+            // specific error code 35 is "Resource temporarily unavailable" which happens on timeout
+            // We ignore timeout errors because we expect the read to time out eventually
+            if let socketError = error as? Socket.Error, socketError.errorCode == -9982 {
+                 print("Discovery permissions issue. Check App Sandbox.")
+            }
+        }
+        
+        // Sort them so they populate in a predictable order
+        return foundIPs.sorted()
+    }
 }
