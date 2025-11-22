@@ -1,18 +1,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    // Bulb 1 Data
-    @AppStorage("bulb1_ip") private var bulb1IP: String = ""
-    @AppStorage("bulb1_name") private var bulb1Name: String = "Bulb 1"
-    
-    // Bulb 2 Data
-    @AppStorage("bulb2_ip") private var bulb2IP: String = ""
-    @AppStorage("bulb2_name") private var bulb2Name: String = "Bulb 2"
+    // Access bulb data store
+    @ObservedObject var store: BulbStore
     
     @State private var isScanning: Bool = false
     @State private var scanStatus: String = ""
 
     var body: some View {
+           
         Form {
             // NEW: Auto-Discovery Section
             Section {
@@ -34,34 +30,78 @@ struct SettingsView: View {
                 }
             }
             
-            Section(header: Text("Bulb 1 Settings")) {
-                TextField("Name", text: $bulb1Name)
-                TextField("IP Address", text: $bulb1IP)
-            }
-            
-            Section(header: Text("Bulb 2 Settings")) {
-                TextField("Name", text: $bulb2Name)
-                TextField("IP Address", text: $bulb2IP)
+            // MARK: - Dynamic Bulb List
+            Section(header: Text("My Bulbs")) {
+                List {
+                    ForEach($store.bulbs) { $bulb in
+                        HStack {
+                            TextField("Name", text: $bulb.name)
+                                .frame(width: 100)
+                            
+                            Divider()
+                            
+                            TextField("IP Address (e.g. 192.168.1.50)", text: $bulb.ip)
+                            
+                            Divider()
+                            
+                            // NEW: Visual Delete Button
+                            Button(action: {
+                                if let index = store.bulbs.firstIndex(where: { $0.id == bulb.id }) {
+                                    store.deleteBulb(at: IndexSet(integer: index))
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                            .buttonStyle(.plain) // Prevents the whole row from flashing
+                        }
+                    }
+                    // Keep onDelete for swipe capability too
+                    .onDelete(perform: store.deleteBulb)
+                }
+                .frame(minHeight: 150) // Give the list some space
+                
+                Button("Add Manually") {
+                    store.addBulb()
+                }
             }
 
             Section {
-                Button("Quit Application") {
-                    NSApplication.shared.terminate(nil)
+                HStack{
+                    Button("Quit Application") {
+                        NSApplication.shared.terminate(nil)
+                    }
+                    Section() {
+                        Text(getAppVersionAndBuild())
+                            .overlay(alignment: .bottomTrailing){}
+                    }
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
+                
             }
         }
         .padding()
-        .frame(width: 350, height: 350) // Increased height for new button
+        .frame(width: 400, height: 400) // Increased height for new button
         .onAppear {
             NSApp.activate(ignoringOtherApps: true)
         }
     }
     
     // MARK: - Logic
+    
+    func getAppVersionAndBuild() -> String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+
+        if let version = version, let build = build {
+            return "Version: \(version) (\(build))"
+        } else {
+            return "Version information not available"
+        }
+    }
     func runDiscovery() {
         isScanning = true
-        scanStatus = ""
+        scanStatus = "Searching..."
         
         Task {
             let foundIPs = await LightController.discoverBulbs()
@@ -74,23 +114,22 @@ struct SettingsView: View {
                     return
                 }
                 
-                // Auto-fill logic:
-                // Fill Bulb 1 if empty
-                // Fill Bulb 2 if empty and we found more than 1 bulb
+                var addedCount = 0
                 
-                var usedIndex = 0
-                
-                if bulb1IP.isEmpty && foundIPs.indices.contains(usedIndex) {
-                    bulb1IP = foundIPs[usedIndex]
-                    usedIndex += 1
+                // Check every IP found
+                for ip in foundIPs {
+                    // If we don't already have this IP in our list, add it
+                    if !store.bulbs.contains(where: { $0.ip == ip }) {
+                        store.addBulb(name: "WiZ \(ip.split(separator: ".").last ?? "?")", ip: ip)
+                        addedCount += 1
+                    }
                 }
                 
-                if bulb2IP.isEmpty && foundIPs.indices.contains(usedIndex) {
-                    bulb2IP = foundIPs[usedIndex]
-                    usedIndex += 1
+                if addedCount > 0 {
+                    scanStatus = "Added \(addedCount) new bulb(s)!"
+                } else {
+                    scanStatus = "Bulbs found, but already in list."
                 }
-                
-                scanStatus = "Found \(foundIPs.count) bulb(s)."
             }
         }
     }

@@ -2,24 +2,26 @@ import SwiftUI
 
 @main
 struct WiZMenuApp: App {
-    // This adaptor helps hide the app from the dock
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
+    // Create a SINGLE shared source of truth for the data
+    @StateObject var store = BulbStore()
 
     var body: some Scene {
         MenuBarExtra("WiZ Control", systemImage: "lightbulb.fill") {
-            ContentView()
+            // FIXED: Pass the shared 'store' here so ContentView sees updates immediately
+            ContentView(store: store)
         }
-        .menuBarExtraStyle(.window) // Allows interactive sliders
+        .menuBarExtraStyle(.window)
         
         Settings {
-            SettingsView()
+            SettingsView(store: store)
         }
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Keeps the app as a menu bar accessory (no dock icon)
         NSApp.setActivationPolicy(.accessory)
     }
 }
