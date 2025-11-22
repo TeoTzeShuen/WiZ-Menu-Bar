@@ -28,6 +28,9 @@ struct ContentView: View {
     // Flag to prevent feedback loops from Bulb -> UI
     @State private var isSyncing: Bool = false
     
+    // State for checking if light is Unreachable
+    @State private var isUnreachable: Bool = false
+    
     var isConfigurationValid: Bool {
         switch selection {
         case .bulb1: return !bulb1IP.isEmpty
@@ -72,7 +75,7 @@ struct ContentView: View {
                 }
             }
             .pickerStyle(.segmented)
-            .onChange(of: selection) { _ in
+            .onChange(of: selection) { _,_ in
                 syncStateWithBulbs()
             }
             
@@ -84,21 +87,30 @@ struct ContentView: View {
                     // Power Button
                     Button(action: toggleBulbLogic) {
                         HStack {
-                            Image(systemName: "power")
-                            Text(isLightOn ? "Turn Off" : "Turn On")
+                        // Change icon if unreachable
+                            Image(systemName: isUnreachable ? "exclamationmark.triangle.fill" : "power")
+                            
+                            // Change text if unreachable
+                            Text(isUnreachable ? "Check Switch/IP" : (isLightOn ? "Turn Off" : "Turn On"))
                                 .fontWeight(.semibold)
+                            
+                            // Old Logic
+                            // Image(systemName: "power")
+                            // Text(isLightOn ? "Turn Off" : "Turn On")
+                            //    .fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(isLightOn ? .orange : .gray)
+                    // Change color to Red if unreachable, otherwise keep existing logic
+                    .tint(isUnreachable ? .red : (isLightOn ? .orange : .gray))
                     .controlSize(.large)
                     
                     // Color Picker - Standard Native Size
                     ColorPicker("", selection: $selectedColor, supportsOpacity: false)
                         .labelsHidden()
-                        .onChange(of: selectedColor) { newColor in
+                        .onChange(of: selectedColor) { _, newColor in
                             handleColorChange(newColor)
                         }
                 }
@@ -111,16 +123,25 @@ struct ContentView: View {
                         Text("Brightness")
                             .font(.caption)
                         Spacer()
-                        Text("\(Int(brightness))%")
-                            .font(.caption)
-                            .monospacedDigit()
-                            .foregroundColor(.secondary)
+                        if Int(brightness) == 0 {
+                            Text("Min")
+                                .font(.caption)
+                                .monospacedDigit()
+                                .foregroundColor(.secondary)
+                        }
+                        else{
+                            Text("\(Int(brightness))%")
+                                .font(.caption)
+                                .monospacedDigit()
+                                .foregroundColor(.secondary)
+                        }
+                        
                     }
                     
-                    Slider(value: $brightness, in: 10...100, step: 10) {
+                    Slider(value: $brightness, in: 0...100, step: 10) {
                         EmptyView()
                     }
-                    .onChange(of: brightness) { newValue in
+                    .onChange(of: brightness) { _,newValue in
                         if !isSyncing {
                             // Update picker visually (brightness only)
                             updatePickerBrightness(newBrightness: newValue)
@@ -146,11 +167,28 @@ struct ContentView: View {
                             .foregroundColor(.secondary)
                     }
                     
+                    // Warmth gradient on temp slider
+                    let kelvinGradient = LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 1.0, green: 0.7, blue: 0.4),
+                            Color.white,
+                            Color(red: 0.8, green: 0.9, blue: 1.0)
+                        ]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    
                     Slider(value: $warmth, in: 2200...6200, step: 400) {
                         EmptyView()
                     }
-                    .tint(.orange)
-                    .onChange(of: warmth) { newValue in
+                    .background(
+                        Capsule()
+                            .fill(kelvinGradient)
+                            .frame(height: 4)
+                            .padding(.horizontal, 2)
+                    )
+                    .tint(.clear)
+                    .onChange(of: warmth) { _,newValue in
                         if !isSyncing {
                             // Update picker visually (Kelvin color)
                             updatePickerToKelvin(kelvin: newValue, bright: brightness)
@@ -307,8 +345,9 @@ struct ContentView: View {
         
         Task {
             if let status = LightController.getStatus(ip: ip) {
+                // SUCCESS: Calculate toggle
                 let shouldTurnOn = !status.isOn
-                
+                    
                 if shouldTurnOn {
                     LightController.turnOn(ip: ip)
                 } else {
@@ -316,7 +355,15 @@ struct ContentView: View {
                 }
                 
                 await MainActor.run {
+                    self.isUnreachable = false // Connection successful
                     self.isLightOn = shouldTurnOn
+                }
+            } else {
+                // FAILURE: Bulb timed out
+                await MainActor.run {
+                    self.isUnreachable = true // Show "Check Switch"
+                    // Optional: Turn off "On" state visually so it doesn't look stuck on
+                    self.isLightOn = false
                 }
             }
         }
@@ -350,6 +397,7 @@ struct ContentView: View {
         Task.detached {
             if let status = LightController.getStatus(ip: ip) {
                 await MainActor.run {
+                    self.isUnreachable = false // Connection OK
                     self.isLightOn = status.isOn
                     self.brightness = status.brightness
                     self.warmth = status.temp
@@ -367,7 +415,9 @@ struct ContentView: View {
                     self.isUpdatingColorProgrammatically = false
                 }
             } else {
-                await MainActor.run { self.isSyncing = false }
+                await MainActor.run {
+                    self.isUnreachable = true // Show Error
+                    self.isSyncing = false }
             }
         }
     }
