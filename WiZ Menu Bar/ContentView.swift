@@ -1,11 +1,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    // FIXED: Changed from @StateObject to @ObservedObject
-    // This means "Watch the store given to me" instead of "Create a new separate store"
     @ObservedObject var store: BulbStore
 
-    // 2. Selection is now a UUID (ID of the bulb)
+    // UUID
     @State private var selectedBulbID: UUID?
 
     // UI State
@@ -38,7 +36,7 @@ struct ContentView: View {
                 
                 // Settings Button
                 if #available(macOS 14.0, *) {
-                    // pass the store to settings
+                    // pass to settings
                     SettingsLink {
                         Image(systemName: "gearshape.fill")
                     }
@@ -65,7 +63,7 @@ struct ContentView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                .onChange(of: selectedBulbID) { _ in
+                .onChange(of: selectedBulbID) { _, _ in
                     syncStateWithBulbs()
                 }
             }
@@ -74,7 +72,7 @@ struct ContentView: View {
             if let currentBulb = getSelectedBulb(), !currentBulb.ip.isEmpty {
                 Divider()
 
-                // 1. Power Button & Color Picker
+                // Power Button & Color Picker
                 HStack(spacing: 10) {
                     Button(action: toggleBulbLogic) {
                         HStack {
@@ -92,12 +90,12 @@ struct ContentView: View {
                     // Color Picker
                     ColorPicker("", selection: $selectedColor, supportsOpacity: false)
                         .labelsHidden()
-                        .onChange(of: selectedColor) { newColor in
+                        .onChange(of: selectedColor) { _, newColor in
                             handleColorChange(newColor)
                         }
                 }
 
-                // 2. Brightness
+                // Brightness
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Image(systemName: "sun.max.fill")
@@ -133,7 +131,7 @@ struct ContentView: View {
                     }
                 }
 
-                // 3. Warmth
+                // Warmth
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Image(systemName: "thermometer.sun.fill")
@@ -181,6 +179,7 @@ struct ContentView: View {
                 }
             } else {
                 Divider()
+                Spacer()
                 Text("Please configure IP for this bulb")
                     .font(.caption)
                     .foregroundColor(.red)
@@ -189,7 +188,9 @@ struct ContentView: View {
             }
         }
         .padding()
+        .frame(minHeight: 263, alignment: .bottom)
         .frame(width: 260)
+        .animation(nil, value: selectedBulbID)
         .onAppear {
             // Select the first bulb by default if none selected
             if selectedBulbID == nil, let first = store.bulbs.first {
@@ -256,9 +257,7 @@ struct ContentView: View {
         }
     }
     
-    // ... (Keep your Color Helpers updatePickerToKelvin, kelvinToColor, handleColorChange exactly as they were) ...
-    
-    // Included here for completeness of the file structure
+    // For completeness of the file structure
     func updatePickerToKelvin(kelvin: Double, bright: Double) {
         isUpdatingColorProgrammatically = true
         selectedColor = kelvinToColor(kelvin, brightness: bright)

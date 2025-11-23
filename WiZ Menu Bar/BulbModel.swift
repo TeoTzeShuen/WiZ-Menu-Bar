@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-// 1. The Definition of a Bulb
+// Define Bulb
 struct Bulb: Identifiable, Codable, Hashable {
     var id = UUID()
     var name: String
     var ip: String
 }
 
-// 2. The Data Manager (Handles saving/loading the list)
+// Data Manager
 class BulbStore: ObservableObject {
     @Published var bulbs: [Bulb] = [] {
         didSet {
@@ -27,9 +27,9 @@ class BulbStore: ObservableObject {
     
     init() {
         load()
-        // Fallback: If empty (first run), add a placeholder so the UI isn't broken
+        // Placeholder Bulb for first run
         if bulbs.isEmpty {
-            bulbs.append(Bulb(name: "Living Room", ip: ""))
+            bulbs.append(Bulb(name: "Example Name", ip: ""))
         }
     }
     
