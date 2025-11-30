@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var isUnreachable: Bool = false
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 19) {
             
             // Header
             HStack {
@@ -81,7 +81,7 @@ struct ContentView: View {
                                 .fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, -2.5) // Some bastardisation to align picker and switch
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(isUnreachable ? .red : (isLightOn ? .orange : .gray))
@@ -136,7 +136,7 @@ struct ContentView: View {
                     HStack {
                         Image(systemName: "thermometer.sun.fill")
                             .font(.caption)
-                        Text("Warmth")
+                        Text(" Warmth") // Added space for alignment with "brightness" text
                             .font(.caption)
                         Spacer()
                         Text("\(Int(warmth))K")
@@ -162,8 +162,8 @@ struct ContentView: View {
                         // Create a capsule shape behind the slider with the gradient
                         Capsule()
                             .fill(kelvinGradient)
-                            .frame(height: 4) // Match the height of a standard macOS slider track
-                            .padding(.horizontal, 2) // Slight padding so the knob doesn't overhang too much
+                            .frame(height: 5) // Match the height of a standard macOS slider track
+                            .padding(.top, -1) // Move bar so it completely obscures slider track
                     )
                     .tint(.clear)
                     .onChange(of: warmth) { _, newValue in
@@ -312,4 +312,15 @@ struct ContentView: View {
         let dimFactor = brightness / 100.0
         return Color(red: min(255, max(0, r))/255*dimFactor, green: min(255, max(0, g))/255*dimFactor, blue: min(255, max(0, b))/255*dimFactor)
     }
+}
+
+// Preview macro
+#Preview {
+    let mockStore = BulbStore()
+    // Optionally, customize bulbs for preview
+    mockStore.bulbs = [
+        Bulb(name: "Demo Light", ip: "192.168.1.100"),
+        Bulb(name: "Living Room", ip: ""),
+    ]
+    return ContentView(store: mockStore)
 }
