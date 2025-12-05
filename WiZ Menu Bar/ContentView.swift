@@ -21,13 +21,31 @@ struct ContentView: View {
     @State private var isUnreachable: Bool = false
     
     var body: some View {
-        VStack(spacing: 19) {
+        VStack(spacing: 25) {
             
             // Header
             HStack {
-                Text("Home Lights")
-                    .font(.headline)
-                Spacer()
+                //Text("Home Lights")
+                //    .font(.headline)
+                //Spacer()
+                
+                //Picker
+                Picker("", selection: $selectedBulbID) {
+                    if store.bulbs.isEmpty {
+                        Text("No Bulbs Found").tag(nil as UUID?)
+                    } else {
+                        ForEach(store.bulbs) { bulb in
+                            Text(bulb.name.isEmpty ? "Unnamed" : bulb.name).tag(bulb.id as UUID?)
+                        }
+                    }
+                }
+                .pickerStyle(.menu)
+                .labelsHidden() // Hides the empty label string so it looks like a clean dropdown
+                .frame(width: 180, alignment: .leading)
+                .onChange(of: selectedBulbID) { _, _ in
+                    syncStateWithBulbs()
+                }
+
                 
                 ProgressView()
                     .scaleEffect(0.5)
@@ -52,25 +70,9 @@ struct ContentView: View {
                 }
             }
             
-            // DYNAMIC PICKER
-            if store.bulbs.isEmpty {
-                Text("No bulbs configured.")
-                    .font(.caption)
-            } else {
-                Picker("", selection: $selectedBulbID) {
-                    ForEach(store.bulbs) { bulb in
-                        Text(bulb.name.isEmpty ? "Unnamed" : bulb.name).tag(bulb.id as UUID?)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: selectedBulbID) { _, _ in
-                    syncStateWithBulbs()
-                }
-            }
             
             // Only show controls if we have a valid IP selected
             if let currentBulb = getSelectedBulb(), !currentBulb.ip.isEmpty {
-                Divider()
 
                 // Power Button & Color Picker
                 HStack(spacing: 10) {
@@ -188,7 +190,7 @@ struct ContentView: View {
             }
         }
         .padding()
-        .frame(minHeight: 263, alignment: .bottom)
+        .frame(minHeight: 200, alignment: .top)
         .frame(width: 260)
         .animation(nil, value: selectedBulbID)
         .onAppear {
