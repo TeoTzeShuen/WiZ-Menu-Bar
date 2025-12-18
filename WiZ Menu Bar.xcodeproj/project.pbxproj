@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		184EB7DC2EF3B659008B4C0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184EB7DB2EF3B659008B4C0A /* WidgetKit.framework */; };
+		184EB7DE2EF3B659008B4C0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184EB7DD2EF3B659008B4C0A /* SwiftUI.framework */; };
+		184EB7EF2EF3CF8B008B4C0A /* WiZWidgetExtension.appex in CopyFiles */ = {isa = PBXBuildFile; fileRef = 184EB7D92EF3B659008B4C0A /* WiZWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		18F69B2E2E0A9C9600545C38 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = 18F69B2D2E0A9C9600545C38 /* Socket */; };
 /* End PBXBuildFile section */
 
@@ -27,15 +30,60 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		184EB7EE2EF3CF6F008B4C0A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				184EB7EF2EF3CF8B008B4C0A /* WiZWidgetExtension.appex in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		184EB7D92EF3B659008B4C0A /* WiZWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WiZWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		184EB7DB2EF3B659008B4C0A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		184EB7DD2EF3B659008B4C0A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		184EB7EB2EF3B7F5008B4C0A /* WiZWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WiZWidgetExtension.entitlements; sourceTree = "<group>"; };
 		18BA5B4C2E0A7BA300CAD0B3 /* WiZ Menu Bar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WiZ Menu Bar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18BA5B5A2E0A7BA400CAD0B3 /* WiZ Menu BarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WiZ Menu BarTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18BA5B642E0A7BA400CAD0B3 /* WiZ Menu BarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WiZ Menu BarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		184EB7E92EF3B65A008B4C0A /* Exceptions for "WiZWidget" folder in "WiZWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 184EB7D82EF3B659008B4C0A /* WiZWidgetExtension */;
+		};
+		184EB7ED2EF3B820008B4C0A /* Exceptions for "WiZ Menu Bar" folder in "WiZWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				BulbModel.swift,
+			);
+			target = 184EB7D82EF3B659008B4C0A /* WiZWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		184EB7DF2EF3B659008B4C0A /* WiZWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				184EB7E92EF3B65A008B4C0A /* Exceptions for "WiZWidget" folder in "WiZWidgetExtension" target */,
+			);
+			path = WiZWidget;
+			sourceTree = "<group>";
+		};
 		18BA5B4E2E0A7BA300CAD0B3 /* WiZ Menu Bar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				184EB7ED2EF3B820008B4C0A /* Exceptions for "WiZ Menu Bar" folder in "WiZWidgetExtension" target */,
+			);
 			path = "WiZ Menu Bar";
 			sourceTree = "<group>";
 		};
@@ -52,6 +100,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		184EB7D62EF3B659008B4C0A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				184EB7DE2EF3B659008B4C0A /* SwiftUI.framework in Frameworks */,
+				184EB7DC2EF3B659008B4C0A /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18BA5B492E0A7BA300CAD0B3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -77,12 +134,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		184EB7DA2EF3B659008B4C0A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				184EB7DB2EF3B659008B4C0A /* WidgetKit.framework */,
+				184EB7DD2EF3B659008B4C0A /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		18BA5B432E0A7BA300CAD0B3 = {
 			isa = PBXGroup;
 			children = (
+				184EB7EB2EF3B7F5008B4C0A /* WiZWidgetExtension.entitlements */,
 				18BA5B4E2E0A7BA300CAD0B3 /* WiZ Menu Bar */,
 				18BA5B5D2E0A7BA400CAD0B3 /* WiZ Menu BarTests */,
 				18BA5B672E0A7BA400CAD0B3 /* WiZ Menu BarUITests */,
+				184EB7DF2EF3B659008B4C0A /* WiZWidget */,
+				184EB7DA2EF3B659008B4C0A /* Frameworks */,
 				18BA5B4D2E0A7BA300CAD0B3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -93,6 +162,7 @@
 				18BA5B4C2E0A7BA300CAD0B3 /* WiZ Menu Bar.app */,
 				18BA5B5A2E0A7BA400CAD0B3 /* WiZ Menu BarTests.xctest */,
 				18BA5B642E0A7BA400CAD0B3 /* WiZ Menu BarUITests.xctest */,
+				184EB7D92EF3B659008B4C0A /* WiZWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,6 +170,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		184EB7D82EF3B659008B4C0A /* WiZWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 184EB7EA2EF3B65A008B4C0A /* Build configuration list for PBXNativeTarget "WiZWidgetExtension" */;
+			buildPhases = (
+				184EB7D52EF3B659008B4C0A /* Sources */,
+				184EB7D62EF3B659008B4C0A /* Frameworks */,
+				184EB7D72EF3B659008B4C0A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				184EB7DF2EF3B659008B4C0A /* WiZWidget */,
+			);
+			name = WiZWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = WiZWidgetExtension;
+			productReference = 184EB7D92EF3B659008B4C0A /* WiZWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		18BA5B4B2E0A7BA300CAD0B3 /* WiZ Menu Bar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18BA5B6E2E0A7BA400CAD0B3 /* Build configuration list for PBXNativeTarget "WiZ Menu Bar" */;
@@ -107,6 +199,7 @@
 				18BA5B482E0A7BA300CAD0B3 /* Sources */,
 				18BA5B492E0A7BA300CAD0B3 /* Frameworks */,
 				18BA5B4A2E0A7BA300CAD0B3 /* Resources */,
+				184EB7EE2EF3CF6F008B4C0A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -176,9 +269,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
+					184EB7D82EF3B659008B4C0A = {
+						CreatedOnToolsVersion = 26.2;
+					};
 					18BA5B4B2E0A7BA300CAD0B3 = {
 						CreatedOnToolsVersion = 16.4;
 					};
@@ -212,11 +308,19 @@
 				18BA5B4B2E0A7BA300CAD0B3 /* WiZ Menu Bar */,
 				18BA5B592E0A7BA400CAD0B3 /* WiZ Menu BarTests */,
 				18BA5B632E0A7BA400CAD0B3 /* WiZ Menu BarUITests */,
+				184EB7D82EF3B659008B4C0A /* WiZWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		184EB7D72EF3B659008B4C0A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18BA5B4A2E0A7BA300CAD0B3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -241,6 +345,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		184EB7D52EF3B659008B4C0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18BA5B482E0A7BA300CAD0B3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -278,6 +389,103 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		184EB7E72EF3B65A008B4C0A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WiZWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D549TCLB75;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WiZWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WiZWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tzeshuen.WiZ-Menu-Bar.WiZWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = xros;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		184EB7E82EF3B65A008B4C0A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WiZWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D549TCLB75;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WiZWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WiZWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tzeshuen.WiZ-Menu-Bar.WiZWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = xros;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
 		18BA5B6C2E0A7BA400CAD0B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -332,7 +540,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -391,7 +599,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -408,8 +616,9 @@
 				CODE_SIGN_ENTITLEMENTS = "WiZ Menu Bar/WiZ_Menu_Bar.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 52;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = D549TCLB75;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -431,8 +640,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 2.4.3;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tzeshuen.WiZ-Menu-Bar";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -449,8 +658,9 @@
 				CODE_SIGN_ENTITLEMENTS = "WiZ Menu Bar/WiZ_Menu_Bar.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 52;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = D549TCLB75;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -472,8 +682,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 2.4.3;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tzeshuen.WiZ-Menu-Bar";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -490,7 +700,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tzeshuen.WiZ-Menu-BarTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -508,7 +718,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tzeshuen.WiZ-Menu-BarTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -553,6 +763,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		184EB7EA2EF3B65A008B4C0A /* Build configuration list for PBXNativeTarget "WiZWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				184EB7E72EF3B65A008B4C0A /* Debug */,
+				184EB7E82EF3B65A008B4C0A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		18BA5B472E0A7BA300CAD0B3 /* Build configuration list for PBXProject "WiZ Menu Bar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

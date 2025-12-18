@@ -210,6 +210,14 @@ struct ContentView: View {
         return store.bulbs.first(where: { $0.id == id })
     }
     
+    // NEW: Update Store helper
+    func updateStoreState() {
+        if let id = selectedBulbID {
+            // Save the state to the shared App Group so the widget sees it
+            store.updateState(for: id, isOn: isLightOn, color: selectedColor)
+        }
+    }
+    
     func toggleBulbLogic() {
         guard let ip = getSelectedBulb()?.ip, !ip.isEmpty else { return }
         
@@ -222,6 +230,7 @@ struct ContentView: View {
                 await MainActor.run {
                     self.isUnreachable = false
                     self.isLightOn = shouldTurnOn
+                    self.updateStoreState()
                 }
             } else {
                 await MainActor.run { self.isUnreachable = true; self.isLightOn = false }
@@ -250,6 +259,7 @@ struct ContentView: View {
                     
                     self.isUpdatingColorProgrammatically = true
                     self.selectedColor = self.kelvinToColor(status.temp, brightness: status.brightness)
+                    self.updateStoreState()
                 }
                 try? await Task.sleep(nanoseconds: 200_000_000)
                 await MainActor.run { self.isSyncing = false; self.isUpdatingColorProgrammatically = false }
@@ -263,6 +273,7 @@ struct ContentView: View {
     func updatePickerToKelvin(kelvin: Double, bright: Double) {
         isUpdatingColorProgrammatically = true
         selectedColor = kelvinToColor(kelvin, brightness: bright)
+        self.updateStoreState()
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 10_000_000)
             isUpdatingColorProgrammatically = false
@@ -291,6 +302,7 @@ struct ContentView: View {
         colorDebounceTask = Task {
             try? await Task.sleep(nanoseconds: 500_000_000)
             if !Task.isCancelled {
+                self.updateStoreState()
                 if let nsColor = NSColor(color).usingColorSpace(.deviceRGB) {
                     let r = Int(nsColor.redComponent * 255)
                     let g = Int(nsColor.greenComponent * 255)

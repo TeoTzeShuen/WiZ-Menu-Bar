@@ -31,40 +31,43 @@ struct SettingsView: View {
             }
             
             // MARK: - Dynamic Bulb List
+            // --- CHANGED "My Bulbs" SECTION START ---
             Section(header: Text("My Bulbs")) {
                 List {
-                    ForEach($store.bulbs) { $bulb in
-                        HStack {
-                            TextField("Name", text: $bulb.name)
-                                .frame(width: 100)
-                            
-                            Divider()
-                            
-                            TextField("IP Address (e.g. 192.168.1.50)", text: $bulb.ip)
-                            
-                            Divider()
-                            
-                            // NEW: Visual Delete Button
-                            Button(action: {
-                                if let index = store.bulbs.firstIndex(where: { $0.id == bulb.id }) {
+                    // CHANGED LOOP: Using indices to get a Binding to the mutable structure
+                    ForEach($store.bulbs.indices, id: \.self) { index in
+                        let binding = $store.bulbs[index]
+                        
+                        VStack(alignment: .leading) {
+                            HStack {
+                                TextField("Name", text: binding.name)
+                                    .frame(width: 100)
+                                Divider()
+                                TextField("IP", text: binding.ip)
+                                Divider()
+                                Button(action: {
                                     store.deleteBulb(at: IndexSet(integer: index))
+                                }) {
+                                    Image(systemName: "trash").foregroundColor(.red)
                                 }
-                            }) {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.red)
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain) // Prevents the whole row from flashing
+                            
+                            // NEW: Widget Toggle
+                            Toggle("Show in Widget", isOn: binding.showInWidget)
+                                .font(.caption)
+                                .padding(.leading, 4)
                         }
+                        .padding(.vertical, 4)
                     }
-                    // Keep onDelete for swipe capability too
-                    .onDelete(perform: store.deleteBulb)
                 }
-                .frame(minHeight: 150) // Give the list some space
+                .frame(minHeight: 150)
                 
                 Button("Add Manually") {
                     store.addBulb()
                 }
             }
+            // --- CHANGED "My Bulbs" SECTION END ---
 
             Section {
                 HStack{
