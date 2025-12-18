@@ -10,6 +10,7 @@
 		184EB7DC2EF3B659008B4C0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184EB7DB2EF3B659008B4C0A /* WidgetKit.framework */; };
 		184EB7DE2EF3B659008B4C0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184EB7DD2EF3B659008B4C0A /* SwiftUI.framework */; };
 		184EB7EF2EF3CF8B008B4C0A /* WiZWidgetExtension.appex in CopyFiles */ = {isa = PBXBuildFile; fileRef = 184EB7D92EF3B659008B4C0A /* WiZWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		184EB80B2EF3FF46008B4C0A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 184EB80A2EF3FF46008B4C0A /* README.md */; };
 		18F69B2E2E0A9C9600545C38 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = 18F69B2D2E0A9C9600545C38 /* Socket */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		184EB7DB2EF3B659008B4C0A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		184EB7DD2EF3B659008B4C0A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		184EB7EB2EF3B7F5008B4C0A /* WiZWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WiZWidgetExtension.entitlements; sourceTree = "<group>"; };
+		184EB80A2EF3FF46008B4C0A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		18BA5B4C2E0A7BA300CAD0B3 /* WiZ Menu Bar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WiZ Menu Bar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18BA5B5A2E0A7BA400CAD0B3 /* WiZ Menu BarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WiZ Menu BarTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18BA5B642E0A7BA400CAD0B3 /* WiZ Menu BarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WiZ Menu BarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +148,7 @@
 		18BA5B432E0A7BA300CAD0B3 = {
 			isa = PBXGroup;
 			children = (
+				184EB80A2EF3FF46008B4C0A /* README.md */,
 				184EB7EB2EF3B7F5008B4C0A /* WiZWidgetExtension.entitlements */,
 				18BA5B4E2E0A7BA300CAD0B3 /* WiZ Menu Bar */,
 				18BA5B5D2E0A7BA400CAD0B3 /* WiZ Menu BarTests */,
@@ -325,6 +328,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				184EB80B2EF3FF46008B4C0A /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
